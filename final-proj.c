@@ -33,6 +33,7 @@ int main(void) {
 
     searchID(students, numStudent);
 
+    printf("\nSorted list of student's GPA in descending order\n");
     sortDescend(students, 0, numStudent-1);
 
     printInfo(students, numStudent);
