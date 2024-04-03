@@ -115,13 +115,13 @@ void printLastName(struct student students[], int numStudent) {
 
 
 int compare_dates(const char* a, const char* b) {
-  struct tm tm_a, tm_b;
-  strptime(a, "%d/%m/%Y", &tm_a);
-  strptime(b, "%d/%m/%Y", &tm_b);
-  time_t time_a = mktime(&tm_a);
-  time_t time_b = mktime(&tm_b);
+    struct tm tm_a, tm_b;
+    strptime(a, "%d/%m/%Y", &tm_a);
+    strptime(b, "%d/%m/%Y", &tm_b);
+    time_t time_a = mktime(&tm_a);
+    time_t time_b = mktime(&tm_b);
 
-  return (difftime(time_a, time_b) < 0) ? -1 : 1;
+    return (difftime(time_a, time_b) < 0) ? -1 : 1;
 }
 
 void printOldest(struct student students[], int numStudent) {
@@ -235,7 +235,6 @@ void merge(struct student arr[], int left, int mid, int right) {
 }
 
 void sortDescend(struct student arr[], int left, int right) {
-    printf("\nSorted list of student's GPA in descending order\n");
     if (left < right) {
         int mid = left + (right - left) / 2;
 
