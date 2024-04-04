@@ -6,42 +6,68 @@
 #include "student.h"
 #include "functions.h"
 
-void getInfo(struct student students[], int numStudent) {
-    for (int i = 0; i < numStudent; i++) {
+#define MAX_NAME_LENGTH 100
+#define MAX_SCORE 1000
+#define NUM_SUBJECTS 3
+
+#define LINE_SEPARATOR "|--------------------------------------------------------------------------------------------------|\n"
+
+#define STUDENT_INFO_FORMAT "|%-12s|%-20s|%-12s|%-12s|%-12s|%-12s|%-12s|\n"
+#define STUDENT_LIST_FILE "./student_list.txt"
+#define DATE_FORMAT "%d/%m/%Y"
+
+void getInfo(struct student students[], int numStudents) {
+    for (int i = 0; i < numStudents; i++) {
         printf("Enter ID for student %d: ", i);
-        scanf("%s", students[i].id);
+        if (scanf("%s", students[i].id) != 1) {
+            printf("Error reading student ID.\n");
+            return;
+        }
         getchar(); // Consume newline character
 
         printf("Enter name for student %d: ", i);
-        fgets(students[i].name, 100, stdin);
+        if (fgets(students[i].name, MAX_NAME_LENGTH, stdin) == NULL) {
+            printf("Error reading student name.\n");
+            return;
+        }
         students[i].name[strcspn(students[i].name, "\n")] = '\0'; // Remove trailing newline
 
         printf("Enter birthdate for student %d (DD/MM/YYYY): ", i);
-        scanf("%s", students[i].birthdate);
+        if (scanf("%s", students[i].birthdate) != 1) {
+            printf("Error reading student birthdate.\n");
+            return;
+        }
 
         printf("Enter algebra score for student %d: ", i);
-        scanf("%f", &students[i].scoreAlgebra);
-
+        if (scanf("%f", &students[i].scoreAlgebra) != 1) {
+            printf("Error reading algebra score.\n");
+            return;
+        }
         printf("Enter calculus score for student %d: ", i);
-        scanf("%f", &students[i].scoreCalculus);
-
+        if (scanf("%f", &students[i].scoreCalculus) != 1) {
+            printf("Error reading calculus score.\n");
+            return;
+        }
         printf("Enter programming score for student %d: ", i);
-        scanf("%f", &students[i].scoreProgramming);
+        if (scanf("%f", &students[i].scoreProgramming) != 1) {
+            printf("Error reading programming score.\n");
+            return;
+        }
 
-        students[i].avg = (students[i].scoreAlgebra + students[i].scoreCalculus + students[i].scoreProgramming) / 3;
+        students[i].avg = (students[i].scoreAlgebra + students[i].scoreCalculus + students[i].scoreProgramming) / NUM_SUBJECTS;
     }
 }
 
 void printInfo(struct student students[], int numStudent) {
-    printf("|%-12s|%-20s|%-12s|%-12s|%-12s|%-12s|%-12s|\n", 
-            "ID", 
-            "Name", 
-            "Birthdate", 
-            "Algebra", 
-            "Calculus", 
-            "Programming", 
-            "Average");
-    printf("|--------------------------------------------------------------------------------------------------|\n"); // take the sum of the previous formatted line
+    printf(STUDENT_INFO_FORMAT, 
+        "ID", 
+        "Name", 
+        "Birthdate", 
+        "Algebra", 
+        "Calculus", 
+        "Programming", 
+        "Average");
+    printf(LINE_SEPARATOR); // take the sum of the previous formatted line
     for (int i=0; i<numStudent; i++) {
         printf("|%-12s|%-20s|%-12s|%-12.2f|%-12.2f|%-12.2f|%-12.2f|\n", 
             students[i].id, 
@@ -56,19 +82,20 @@ void printInfo(struct student students[], int numStudent) {
 
 void writeInfo(struct student students[], int numStudent, char file[]) {
     FILE *fptr; 
-    fptr = fopen("./student_list.txt", "w"); 
+    fptr = fopen(STUDENT_LIST_FILE, "w");
     assert(fptr != NULL);
 
 
-    fprintf(fptr, "\n|%-12s|%-20s|%-12s|%-12s|%-12s|%-12s|%-12s|\n", 
-            "ID", 
-            "Name", 
-            "Birthdate", 
-            "Algebra", 
-            "Calculus", 
-            "Programming", 
-            "Average");
-    fprintf(fptr, "|--------------------------------------------------------------------------------------------------|\n"); // take the sum of the previous formatted line
+    fprintf(fptr, STUDENT_INFO_FORMAT, 
+        "ID", 
+        "Name", 
+        "Birthdate", 
+        "Algebra", 
+        "Calculus", 
+        "Programming", 
+        "Average"
+        );
+    fprintf(fptr, LINE_SEPARATOR); // take the sum of the previous formatted line
     for (int i=0; i<numStudent; i++) {
         fprintf(fptr, "|%-12s|%-20s|%-12s|%-12.2f|%-12.2f|%-12.2f|%-12.2f|\n", 
             students[i].id, 
@@ -91,7 +118,7 @@ float highestGPA(struct student students[], int numStudent) {
 }
 
 float lowestGPA(struct student students[], int numStudent) {
-    float min = 1000; // 1000 is a large enough number
+    float min = MAX_SCORE; // MAX_SCORE is a large enough number
     for (int i=0; i<numStudent; i++) {
         if (students[i].avg < min) min = students[i].avg;
     }
@@ -116,8 +143,8 @@ void printLastName(struct student students[], int numStudent) {
 
 int compare_dates(const char* a, const char* b) {
     struct tm tm_a, tm_b;
-    strptime(a, "%d/%m/%Y", &tm_a);
-    strptime(b, "%d/%m/%Y", &tm_b);
+    strptime(a, DATE_FORMAT, &tm_a);
+    strptime(b, DATE_FORMAT, &tm_b);
     time_t time_a = mktime(&tm_a);
     time_t time_b = mktime(&tm_b);
 
@@ -173,7 +200,7 @@ void searchID(struct student students[], int numStudent) {
                     "Calculus", 
                     "Programming", 
                     "Average");
-            printf("|--------------------------------------------------------------------------------------------------|\n"); // take the sum of the previous formatted line
+            printf(LINE_SEPARATOR); // take the sum of the previous formatted line
             printf("|%-12s|%-20s|%-12s|%-12.2f|%-12.2f|%-12.2f|%-12.2f|\n", 
                 students[i].id, 
                 students[i].name, 
