@@ -36,13 +36,42 @@ void readStudentName(struct student *student, int index)
 	student->name[strcspn(student->name, "\n")] = '\0';	// Remove trailing newline
 }
 
+int isValidDate(int day, int month, int year)
+{
+	time_t t = time(NULL);
+	struct tm tm = *localtime(&t);
+	int currentYear = tm.tm_year + 1900;
+
+	if (day < 1 || day > 31) {
+		return 0;
+	}
+	if (month < 1 || month > 12) {
+		return 0;
+	}
+	if (year < 1900 || year > currentYear) {
+		return 0;
+	}
+	return 1;
+}
+
 void readStudentBirthdate(struct student *student, int index)
 {
-	printf("Enter birthdate for student %d (DD/MM/YYYY): ", index);
-	if (scanf("%s", student->birthdate) != 1) {
-		printf("Error reading student birthdate.\n");
-		return;
+	int day, month, year;
+	while (1) {
+		printf("Enter birthdate for student %d (DD/MM/YYYY): ", index);
+		if (scanf("%d/%d/%d", &day, &month, &year) != 3) {
+			printf
+			    ("Error reading student birthdate. Please try again.\n");
+			while (getchar() != '\n') ;	// clear input buffer
+			continue;
+		}
+		if (!isValidDate(day, month, year)) {
+			printf("Invalid date. Please try again.\n");
+			continue;
+		}
+		break;
 	}
+	sprintf(student->birthdate, "%02d/%02d/%04d", day, month, year);
 }
 
 void readStudentScore(float *score, char *subject, int index)
