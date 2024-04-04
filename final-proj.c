@@ -4,39 +4,40 @@
 
 #include "functions.h"
 
-int main(void) {
-    int numStudent = 0;
-    printf("How many students?\n");
-    scanf("%d", &numStudent);
-    assert(numStudent <= 1000);
+int main(void)
+{
+	int numStudent = 0;
+	printf("How many students?\n");
+	scanf("%d", &numStudent);
+	assert(numStudent <= 1000);
 
-    struct student students[numStudent];
-    getInfo(students, numStudent);
+	struct student students[numStudent];
+	getInfo(students, numStudent);
 
-    printInfo(students, numStudent);
-    
-    writeInfo(students, numStudent, "./student_list.txt");
+	printInfo(students, numStudent);
 
-    float maxAvg = highestGPA(students, numStudent);
-    float minAvg = lowestGPA(students, numStudent); 
-    float maxBP = highestBP(students, numStudent);
+	writeInfo(students, numStudent, "./student_list.txt");
 
-    printf("\nThe highest average GPA is: %.2f\n", maxAvg);
-    printf("The lowest average GPA is: %.2f\n", minAvg);
-    printf("The highest BP GPA is: %.2f\n", maxBP);
+	float maxAvg = highestGPA(students, numStudent);
+	float minAvg = lowestGPA(students, numStudent);
+	float maxBP = highestBP(students, numStudent);
 
-    printLastName(students, numStudent);
+	printf("\nThe highest average GPA is: %.2f\n", maxAvg);
+	printf("The lowest average GPA is: %.2f\n", minAvg);
+	printf("The highest BP GPA is: %.2f\n", maxBP);
 
-    printOldest(students, numStudent);
+	printLastName(students, numStudent);
 
-    printYoungest(students, numStudent);
+	printOldest(students, numStudent);
 
-    searchID(students, numStudent);
+	printYoungest(students, numStudent);
 
-    printf("\nSorted list of student's GPA in descending order\n");
-    sortDescend(students, 0, numStudent-1);
+	searchID(students, numStudent);
 
-    printInfo(students, numStudent);
+	printf("\nSorted list of student's GPA in descending order\n");
+	sortDescend(students, 0, numStudent - 1);
 
-    return 0;
+	printInfo(students, numStudent);
+
+	return 0;
 }
