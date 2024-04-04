@@ -16,48 +16,62 @@
 #define STUDENT_LIST_FILE "./student_list.txt"
 #define DATE_FORMAT "%d/%m/%Y"
 
+void readStudentID(struct student *student, int index)
+{
+	printf("Enter ID for student %d: ", index);
+	if (scanf("%s", student->id) != 1) {
+		printf("Error reading student ID.\n");
+		return;
+	}
+	getchar();		// Consume newline character
+}
+
+void readStudentName(struct student *student, int index)
+{
+	printf("Enter name for student %d: ", index);
+	if (fgets(student->name, MAX_NAME_LENGTH, stdin) == NULL) {
+		printf("Error reading student name.\n");
+		return;
+	}
+	student->name[strcspn(student->name, "\n")] = '\0';	// Remove trailing newline
+}
+
+void readStudentBirthdate(struct student *student, int index)
+{
+	printf("Enter birthdate for student %d (DD/MM/YYYY): ", index);
+	if (scanf("%s", student->birthdate) != 1) {
+		printf("Error reading student birthdate.\n");
+		return;
+	}
+}
+
+void readStudentScore(float *score, char *subject, int index)
+{
+	printf("Enter %s score for student %d: ", subject, index);
+	if (scanf("%f", score) != 1) {
+		printf("Error reading %s score.\n", subject);
+		return;
+	}
+}
+
+void calculateStudentAverage(struct student *student)
+{
+	student->avg =
+	    (student->scoreAlgebra + student->scoreCalculus +
+	     student->scoreProgramming) / NUM_SUBJECTS;
+}
+
 void getInfo(struct student students[], int numStudents)
 {
 	for (int i = 0; i < numStudents; i++) {
-		printf("Enter ID for student %d: ", i);
-		if (scanf("%s", students[i].id) != 1) {
-			printf("Error reading student ID.\n");
-			return;
-		}
-		getchar();	// Consume newline character
-
-		printf("Enter name for student %d: ", i);
-		if (fgets(students[i].name, MAX_NAME_LENGTH, stdin) == NULL) {
-			printf("Error reading student name.\n");
-			return;
-		}
-		students[i].name[strcspn(students[i].name, "\n")] = '\0';	// Remove trailing newline
-
-		printf("Enter birthdate for student %d (DD/MM/YYYY): ", i);
-		if (scanf("%s", students[i].birthdate) != 1) {
-			printf("Error reading student birthdate.\n");
-			return;
-		}
-
-		printf("Enter algebra score for student %d: ", i);
-		if (scanf("%f", &students[i].scoreAlgebra) != 1) {
-			printf("Error reading algebra score.\n");
-			return;
-		}
-		printf("Enter calculus score for student %d: ", i);
-		if (scanf("%f", &students[i].scoreCalculus) != 1) {
-			printf("Error reading calculus score.\n");
-			return;
-		}
-		printf("Enter programming score for student %d: ", i);
-		if (scanf("%f", &students[i].scoreProgramming) != 1) {
-			printf("Error reading programming score.\n");
-			return;
-		}
-
-		students[i].avg =
-		    (students[i].scoreAlgebra + students[i].scoreCalculus +
-		     students[i].scoreProgramming) / NUM_SUBJECTS;
+		readStudentID(&students[i], i);
+		readStudentName(&students[i], i);
+		readStudentBirthdate(&students[i], i);
+		readStudentScore(&students[i].scoreAlgebra, "algebra", i);
+		readStudentScore(&students[i].scoreCalculus, "calculus", i);
+		readStudentScore(&students[i].scoreProgramming, "programming",
+				 i);
+		calculateStudentAverage(&students[i]);
 	}
 }
 
