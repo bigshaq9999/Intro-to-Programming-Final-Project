@@ -24,11 +24,6 @@ int isValidID(char *id)
 		if (id[0] == '-') {
 			return 0;	// return false if the number is negative
 		}
-		for (int i = 0; i < length; i++) {
-			if (!isdigit(id[i])) {
-				return 0;
-			}
-		}
 		return 1;
 	}
 	return 0;
