@@ -2,6 +2,7 @@
 #include <string.h>
 #include <assert.h>
 #include <time.h>
+#include <ctype.h>
 
 #include "student.h"
 #include "functions.h"
@@ -16,13 +17,40 @@
 #define STUDENT_LIST_FILE "./student_list.txt"
 #define DATE_FORMAT "%d/%m/%Y"
 
+int isValidID(char *id)
+{
+	int length = strlen(id);
+	if (length > 0 && length <= 10) {
+		if (id[0] == '-') {
+			return 0;	// return false if the number is negative
+		}
+		for (int i = 0; i < length; i++) {
+			if (!isdigit(id[i])) {
+				return 0;
+			}
+		}
+		return 1;
+	}
+	return 0;
+}
+
 void readStudentID(struct student *student, int index)
 {
-	printf("Enter ID for student %d: ", index);
-	if (scanf("%s", student->id) != 1) {
-		printf("Error reading student ID.\n");
-		return;
+	char tempID[11];	// Temporary buffer to hold the ID
+	while (1) {
+		printf("Enter ID for student %d: ", index);
+		if (scanf("%10s", tempID) != 1) {
+			printf("Error reading student ID. Please try again.\n");
+			while (getchar() != '\n') ;	// clear input buffer
+			continue;
+		}
+		if (!isValidID(tempID)) {
+			printf("Invalid ID. Please try again.\n");
+			continue;
+		}
+		break;
 	}
+	strcpy(student->id, tempID);	// Copy the valid ID to the student structure
 	getchar();		// Consume newline character
 }
 
