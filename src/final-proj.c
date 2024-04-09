@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include "functions.h"
+#include "functions.h" 
 
 #define MAX_STUDENTS 1000
 

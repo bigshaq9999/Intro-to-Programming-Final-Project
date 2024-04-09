@@ -31,6 +31,7 @@ int isValidID(char *id)
 		return 1;
 	}
 	return 0;
+	}
 }
 
 void readStudentID(struct student *student, int index)
