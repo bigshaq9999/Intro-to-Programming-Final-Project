@@ -1,24 +1,32 @@
 CC = clang
-CFLAGS = -Wall -Wextra -pedantic -std=c11
+CFLAGS = -Wall -Wextra -pedantic -std=c11 -I include
 
 # List of source files
-SRCS = final-proj.c functions.c 
+SRC = src/final-proj.c src/functions.c 
 
-# List of object files (derived from source files)
-OBJS = $(SRCS:.c=.o)
+# List of object files
+OBJ = $(SRC:.c=.o)
 
-# Target executable
-TARGET = final-proj 
+# Name of the executable
+EXEC = final-proj
 
-all: $(TARGET)
+# Default target
+all: $(EXEC)
 
-# Rule to build the target executable
-$(TARGET): $(OBJS)
-		$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
+# Linking the object files
+$(EXEC): $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $^
 
-# Rule to build object files from source files
+# Compiling the source files
 %.o: %.c
-		$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
+# Cleaning up
 clean:
-		rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJ) $(EXEC)
+
+# Dependencies
+final-proj.o: include/functions.h
+functions.o: include/functions.h
+
+# EOF
