@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <assert.h>
-#include <string.h>
 
-#include "functions.h" 
+#include "calculations.h" 
+#include "utils.h"
+#include "io.h"
 
 #define MAX_STUDENTS 1000
 

@@ -2,7 +2,7 @@ CC = clang
 CFLAGS = -Wall -Wextra -pedantic -std=c11 -I include
 
 # List of source files
-SRC = src/final-proj.c src/functions.c 
+SRC = src/final-proj.c src/io.c src/utils.c src/calculations.c
 
 # List of object files
 OBJ = $(SRC:.c=.o)
@@ -27,6 +27,8 @@ clean:
 
 # Dependencies
 final-proj.o: include/functions.h
-functions.o: include/functions.h
+io.o: include/io.h
+calculations.o: include/calculations.h
+utils.o: include/utils.h
 
 # EOF
